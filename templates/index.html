@@ -1,0 +1,130 @@
+{% extends 'layout.html' %}
+{% block title %} MAIN MENU {% endblock %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<style>
+{#.span3 {#}
+{#    height: 500px !important;#}
+{#    overflow: scroll;#}
+{#}#}
+
+</style>
+<script>
+
+$(document).ready(function(){
+   $(".brand").select2();
+   var form=$("#forms");
+   form.submit(function(e){
+       $.ajax({
+           url:form.attr("action"),
+           type:form.attr("method"),
+           data:form.serialize(),
+           success:function(data){
+               alert(data)
+               $('#form')[0].reset();
+           }
+       });
+       e.preventDefault();
+   });
+    $(".tanggal").datepicker({
+        format: 'yyyy-mm-dd'
+
+    });
+{#      $('#form')[0].reset();#}
+});
+</script>
+    {#    <p><h1>Form Input Keramik</h1></p>#}
+    <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel ">
+                  <div class="x_title">
+                    <h2>Form Input Stok <small>{% now "j F Y " %}</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form id="forms" data-parsley-validate class="form-horizontal form-label-left" action="{% url "saveStok" %}" method="POST">
+                         {% csrf_token %}
+                    <input type="hidden" name="jumlah" value="{{ size|length }}">
+                    <input type="hidden" name="user" value="{{user.useremployee.karyawan.id}} ">
+                             <div class="span3">
+                                <div class="row">
+                         <div class="col-md-12 col-sm-12 col-xs-12">
+                                 <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                          <div class="col-md-4 col-sm-12 col-xs-12">
+                          </div>
+                        <div class="col-md-3 col-sm-4 col-xs-4">
+                            <select class="form-control" name="periode">
+                                <option value="1">Periode 1</option>
+                                <option value="2">Periode 2</option>
+                            </select>
+                        </div>
+                         <div class="col-md-3 col-sm-4 col-xs-4">
+                           <select class="form-control" name="month">
+                                <option value="1">JANUARY</option>
+                                <option value="2">FEBRUARY</option>
+                                <option value="3">MARCH</option>
+                                <option value="4">APRIL</option>
+                                <option value="5">MAY</option>
+                                <option value="6">JUNY</option>
+                                <option value="7">JULY</option>
+                                <option value="8">AGUSTUS</option>
+                                <option value="9">SEPTEMBER</option>
+                                <option value="10">OKTOBER</option>
+                                <option value="11">NOVEMBER</option>
+                                <option value="12">DECEMBER</option>
+                            </select>
+                        </div>
+                          <input type="submit" value="SIMPAN" class="btn btn-primary" >
+                      </div>
+                                 </div>
+                                    <table class="table table-bordered" style="margin-left: auto; margin-right: auto;">
+                                    <thead>
+                                    <tr>
+                                    <td rowspan="2" style="width: 5%">No</td>
+                                    <td rowspan="2" style="width: 10%;" ><strong>Ukuran</strong></td>
+
+                                    </tr>
+                                    <tr>
+                                    <td  align="center">KITA</td>
+                                    <td  align="center">PICASSO</td>
+                                    <td  align="center">HARMONY</td>
+                                    <td align="center">ATENA</td>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                      {% for data in  size %}
+                                      <tr>
+                                        <td>{{ forloop.counter }}  </td>
+                                        <td><input type="hidden" name="size{{ forloop.counter }}" value="{{ data.id }}">{{ data.namaUkuran }}  </td>
+                                        <td style="width: 10%"><input type="text" class="form-control" name="kita{{ forloop.counter }}" value="0" > </td>
+                                        <td style="width: 10%"><input type="text" class="form-control" name="picasso{{ forloop.counter }}" value="0"> </td>
+                                        <td style="width: 10%"><input type="text" class="form-control" name="harmony{{ forloop.counter }}" value="0"> </td>
+                                        <td style="width: 10%"><input type="text" class="form-control" name="atena{{ forloop.counter }}" value="0"> </td>
+
+                                      </tr>
+                                      {% endfor %}
+                                    </tbody>
+                                    </table>
+
+
+              </div>
+
+
+                    </form>
+
+
+                                    </div>
+                             </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}

@@ -1,0 +1,212 @@
+{% extends 'layout.html' %}
+{% block title %} Edit Stok {% endblock %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% load templatetags %}
+{% block content %}
+    <script>
+    $(document).ready(function () {
+        var form = $(".form")
+        form.submit(function(e){
+              $.ajax({
+                  data : form.serialize(),
+                  type : form.attr('method'),
+                  url  : form.attr('action'),
+                  success:function(data){
+
+                      $(".success").html('<div class="alert alert-success"><strong>Success!</strong> Data update </div>')
+                  }
+              })
+            e.preventDefault();
+        });
+
+    })
+    </script>
+ <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel ">
+                  <div class="x_title">
+                    <h2>Form Change Stok <small>{% now "j F Y " %}</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                <section>
+					<div class="section-body">
+						<div class="row">
+
+							<!-- BEGIN  - FORM -->
+							<div class="col-lg-12">
+								<div class="card">
+
+									<div class="card-body">
+
+                                         {% if form.errors %}
+
+                                            <div class="alert alert-danger">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>Error!</strong> {{ form.errors }}
+                                            </div>
+
+                                        {% endif %}
+                                    <div class="success">
+
+                                    </div>
+
+                                    <div class="x_content">
+                    <br />
+                    <form id="demo-form2" action="" method="post" data-parsley-validate class="form-horizontal form-label-left form">
+{#<form class="form" role="form" action="" method="post" data-parsley-validate class="form-horizontal form-label-left"> {% csrf_token %}#}
+                      {% csrf_token %}
+                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">TANGGAL <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                           {{ form.tanggal | add_class:'form-control' |attr:"readonly" }}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">UKURAN <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          {{ form.size | add_class:'form-control' |attr:"readonly" }}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">KITA</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.kita | add_class:'form-control'}}
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">PICASSO <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.picasso | add_class:'form-control'  }}
+                        </div>
+                      </div>
+                          <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">HARMONY <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.harmony | add_class:'form-control'  }}
+                        </div>
+                      </div>
+                          <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">ATENA <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.atena | add_class:'form-control'  }}
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+
+						  <button class="btn btn-primary" type="reset">Reset</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+{#<form class="form" role="form" action="" method="post"> {% csrf_token %}#}
+{##}
+{#    <div class="row">#}
+{#                                                <div class="col-sm-6">#}
+{#                                                    <label for="regular2">TANGGAL</label>#}
+{#                                                    {{ form.tanggal | add_class:'form-control' |attr:"readonly" }}#}
+{##}
+{#                                                </div>#}
+{#                                                 <div class="col-sm-6">#}
+{#                                                    <label for="regular2">UKURAN</label>#}
+{#                                                    {{ form.size | add_class:'form-control' |attr:"readonly" }}#}
+{##}
+{#                                                </div>#}
+{#    </div>#}
+{#    <HR>#}
+{#											<div class="row">#}
+{#												<div class="col-sm-6">#}
+{#													<header>Change Password</header>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">BOX (KITA)</label>#}
+{#														{{ form.k_box | add_class:'form-control' }}#}
+{##}
+{#													</div>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">% (KITA)</label>#}
+{#														{{ form.k_persen | add_class:'form-control' }}#}
+{##}
+{#														<em class="pull-right">Password must contain at least 8 characters.</em>#}
+{#													</div>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">BOX (PICASSO)</label>#}
+{#														{{ form.p_box | add_class:'form-control' }}#}
+{##}
+{#													</div>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">% (PICASSO)</label>#}
+{#														{{ form.p_persen | add_class:'form-control' }}#}
+{##}
+{#														<em class="pull-right">Password must contain at least 8 characters.</em>#}
+{#													</div>#}
+{#												</div>#}
+{#                                                <div class="col-sm-6">#}
+{#													<header>Change Password</header>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">BOX (HARMONY)</label>#}
+{#														{{ form.h_box | add_class:'form-control' }}#}
+{##}
+{#													</div>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">% (HARMONY)</label>#}
+{#														{{ form.h_persen | add_class:'form-control' }}#}
+{##}
+{#														<em class="pull-right">Password must contain at least 8 characters.</em>#}
+{#													</div>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">BOX (ATENA)</label>#}
+{#														{{ form.a_box | add_class:'form-control' }}#}
+{##}
+{#													</div>#}
+{#													<div class="form-group floating-label">#}
+{#                                                        <label for="regular2">% (ATENA)</label>#}
+{#														{{ form.a_persen | add_class:'form-control' }}#}
+{##}
+{#														<em class="pull-right">Password must contain at least 8 characters.</em>#}
+{#													</div>#}
+{#												</div>#}
+{#                                                <div class="col-sm-6">#}
+{#                                                    <img src="{% static 'images/pass.jpg' %}" width="80%" class="center-block">#}
+{#                                                </div>#}
+{#                                                <div class="col-md-10">#}
+{#												</div>#}
+{##}
+{#                                                <div class="col-md-2">#}
+{#                                                 <br>#}
+{#													<div class="card-actionbar-row">#}
+{#														<input type="submit" class="btn btn-flat btn-primary ink-reaction" value="UPDATE" ><a href="{% url 'stokdata'%}" class="btn btn-success">BACK</a>#}
+{#													</div>#}
+{#                                                </div>#}
+{#											</div>#}
+{#										</form>#}
+                                    </div><!--end .card-body -->
+								</div><!--end .card -->
+							</div><!--end .col -->
+							<!-- END FORM - TIME ON SITE -->
+
+						</div><!--end .row -->
+					</div><!--end .section-body -->
+				</section>
+
+                  </div>
+                </div>
+              </div>
+    </div>
+
+{% endblock %}

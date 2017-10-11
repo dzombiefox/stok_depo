@@ -1,0 +1,272 @@
+{% extends 'layout.html' %}
+{% block title %} Data Stok {% endblock %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% load templatetags %}
+{% block content %}
+    <script>
+        $(document).ready(function(){
+           $(".bulan").select2()
+            $(".tanggal").datepicker({ format: 'yyyy-mm-dd'})
+        });
+    </script>
+  <div class="row">
+  <ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="#">Home</a></li>
+  <li class="breadcrumb-item"><a href="#">Library</a></li>
+  <li class="breadcrumb-item active">Data</li>
+</ol>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+             <form method="POST" action="/">
+                {% csrf_token %}
+{#            <input type="hidden" name="depo" value="{{ user.useremployee.karyawan.depo.id}}">#}
+            <div class="box-body ">
+              <div class="row">
+                   <div class="col-xs-4">
+                   </div>
+
+                <div class="col-md-3 col-sm-4 col-xs-4">
+                            <select class="form-control" name="periode">
+                                <option value="1">Periode 1</option>
+                                <option value="2">Periode 2</option>
+                            </select>
+                        </div>
+                         <div class="col-md-3 col-sm-4 col-xs-4">
+                           <select class="form-control" name="month">
+                                <option value="1">JANUARY</option>
+                                <option value="2">FEBRUARY</option>
+                                <option value="3">MARCH</option>
+                                <option value="4">APRIL</option>
+                                <option value="5">MAY</option>
+                                <option value="6">JUNY</option>
+                                <option value="7">JULY</option>
+                                <option value="8">AGUSTUS</option>
+                                <option value="9">SEPTEMBER</option>
+                                <option value="10">OKTOBER</option>
+                                <option value="11">NOVEMBER</option>
+                                <option value="12">DECEMBER</option>
+                            </select>
+                        </div>
+                <div class="col-xs-2">
+                  <input type="submit" value="Cari" class="btn btn-primary btn-flat" >
+                    <a class="btn btn-success hidden-print"  onclick="jQuery('#mydiv').print()"><span class="fa fa-print" aria-hidden="true"></span> Print</a>
+                </div>
+              </div>
+            </div>
+                </form>
+<div class="x_content " id="mydiv">
+                   <br>
+                    <table  class="table table-striped table-bordered">
+                      <thead>
+                            <tr>
+                            <th rowspan="3" style="width: 5%;text-align: center;vertical-align: middle !important;">No</th>
+                            <th rowspan="3" style="width: 10%;text-align: center;vertical-align: middle !important;" ><strong>Ukuran</strong></th>
+                                <th style="text-align: center;" colspan="12">GRAND TOTAL KESELURUHAN</th>
+                            </tr>
+                            <tr>
+                            <td colspan="2" align="center">KITA</td>
+                            <td colspan="2" align="center">PICASSO</td>
+                            <td colspan="2" align="center">HARMONY</td>
+                            <td colspan="2" align="center">ATENA</td>
+                            <td colspan="2" align="center">TOTAL P+H</td>
+                            <td colspan="2" align="center">GRAND TOTAL</td>
+                            </tr>
+                            <tr>
+                            <td align="center">BOX</td>
+                            <td align="center">%</td>
+                            <td align="center">BOX</td>
+                            <td align="center">%</td>
+                            <td align="center">BOX</td>
+                            <td align="center">%</td>
+                            <td align="center">BOX</td>
+                            <td align="center">%</td>
+                            <td align="center">BOX</td>
+                            <td align="center">%</td>
+                            <td align="center">BOX</td>
+                            <td align="center">%</td>
+                            </tr>
+                      </thead>
+                      <tbody>
+
+                            {% for data in data %}
+                          <tr>
+                          <td>{{ forloop.counter }}</td>
+                          <td>{{ data.size__namaUkuran }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |boxkita:data.size }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |persenkita:data.size }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |boxpicasso:data.size }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |persenpicasso:data.size  }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |boxharmony:data.size }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |persenharmony:data.size  }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |boxatena:data.size }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |persenatena:data.size  }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |boxpicharmony:data.size | intcomma }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |totalpersenpicharmony:data.size  }}</td>
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |totalbox:data.size  |intcomma}}</td>
+
+                          <td align="right">{{ data.tanggal | date:"Y-m-d" |totalpersen:data.size  |intcomma}}</td>
+                          </tr>
+                            {% endfor %}
+                          <tr style="font-weight: bold">
+                              <td colspan="2">GRAND TOTAL</td>
+                              <td align="right">{{ tanggal |grandtotalkita |intcomma }}</td>
+                              <td align="right">{{ tanggal | totalpersenkita  }}</td>
+                              <td align="right">{{ tanggal |grandtotalpicasso |intcomma }}</td>
+                              <td align="right">{{ tanggal | totalpersenpicasso  }}</td>
+                              <td align="right">{{ tanggal |grandtotalharmony |intcomma }}</td>
+                              <td align="right">{{ tanggal | totalpersenharmony  }}</td>
+                              <td align="right">{{ tanggal |grandtotalatena |intcomma }}</td>
+                              <td align="right">{{ tanggal | totalpersenatena  }}</td>
+                              <td align="right">{{ tanggal | grandtotalboxpicharmony | intcomma }}</td>
+                              <td align="right">{{ tanggal | grandtotalpersenpicharmony }}</td>
+                              <td align="right">{{ tanggal | grandtotalbox | intcomma }}</td>
+                              <td align="right">{{ tanggal | grandtotalpersen }}</td>
+                          </tr>
+                          </tr>
+                               <tr style="font-weight: bold;color: cornflowerblue">
+                               <td colspan="2">STANDART</td>
+                                <td align="right">{{ std.sk_box |intcomma }}</td>
+                                <td align="right">{{ std.sk_persen |intcomma }}</td>
+                                <td align="right">{{ std.sp_box |intcomma }}</td>
+                                <td align="right">{{ std.sp_persen |intcomma }}</td>
+                                <td align="right">{{ std.sh_box |intcomma }}</td>
+                                <td align="right">{{ std.sh_persen |intcomma }}</td>
+                                <td align="right">{{ std.sa_box |intcomma }}</td>
+                                <td align="right">{{ std.sa_persen |intcomma }}</td>
+                                <td align="right">{{ std.s_boxph |intcomma }}</td>
+                                <td align="right">{{ std.s_persenph |intcomma }}</td>
+                                <td align="right">{{ std.s_totalbox |intcomma }}</td>
+                                <td align="right">{{ std.s_totalpersen |intcomma }}</td>
+                               </tr>
+                          <tr style="font-weight: bold;color: cornflowerblue">
+                               <td colspan="2">LEBIH / KURANG</td>
+                               <td align="right">{{ tanggal |kurang_k |intcomma}}</td>
+                               <td align="right">{{ tanggal | lkpersen_kita |intcomma }}</td>
+                               <td align="right">{{ tanggal | lkpicasso_box |intcomma }}</td>
+                               <td align="right">{{ tanggal | lkpicasso_persen |intcomma }}</td>
+                               <td align="right">{{ tanggal | lkharmony_box |intcomma }}</td>
+                               <td align="right">{{ tanggal | lkharmony_persen |intcomma}}</td>
+                               <td align="right">{{ tanggal | lkatena_box |intcomma  }}</td>
+                               <td align="right">{{ tanggal | lkatena_persen |intcomma }}</td>
+                               <td align="right">{{ tanggal | lkpicharmony_box |intcomma }}</td>
+                               <td align="right">{{ tanggal | lkpicharmony_persen |intcomma }}</td>
+                               <td align="right">{{ tanggal | totalbox_lk |intcomma}}</td>
+                               <td align="right">{{ tanggal | totalpersen_lk |intcomma }}</td>
+                          </tr>
+                               <tr style="font-weight: bold">
+                               <td colspan="2">%</td>
+                               <td colspan="2" align="right">{{ tanggal | tpersen_kita |intcomma }}</td>
+                               <td colspan="2" align="right">{{ tanggal | tpersen_picasso |intcomma }}</td>
+                               <td colspan="2" align="right">{{ tanggal | tpersen_harmony |intcomma }}</td>
+                               <td colspan="2" align="right">{{ tanggal | tpersen_atena |intcomma }}</td>
+                               <td colspan="2" align="right">{{ tanggal | tpersen_pichar |intcomma }}</td>
+                               <td  align="right" >100.00</td>
+                               <td align="right">%</td>
+                               </tr>
+                               <tr style="font-weight: bold;">
+                               <td colspan="2">KOMPOSISI</td>
+                               <td align="right" colspan="2" >35</td>
+                               <td colspan="4" align="right">50</td>
+                               <td colspan="2" align="right">15</td>
+                               <td colspan="2" align="right">-</td>
+                               <td align="right" colspan="2">100</td>
+                               </tr>
+                               <tr style="font-weight: bold;">
+                               <td colspan="2">SELISIH</td>
+                               <td align="right" colspan="2">{{ tanggal |selisih_kita | intcomma }}</td>
+                               <td align="right" colspan="4">{{ tanggal | selisih_pichar | intcomma }}</td>
+                               <td colspan="2" align="right">{{ tanggal | selisih_atena | intcomma }}</td>
+                               <td colspan="2" align="right">-</td>
+                               <td colspan="2" align="right">SELISIH</td>
+                               </tr>
+                      </tbody>
+                    </table>
+
+<hr>
+<div class="row">
+
+{% for data in disc %}
+    <div class="col-lg-6">
+       <table class="table table-bordered">
+           <thead>
+            <tr>
+                <td colspan="7" align="center"><strong>RANGKUMAN PER {{ data.tanggal }}</strong></td>
+            </tr>
+            <tr>
+                <th>MERK</th>
+                <th>PABRIK</th>
+                <th>%</th>
+                <th>DEPO</th>
+                <th>%</th>
+                <th>TOTAL</th>
+                <th>%</th>
+            </tr>
+           <tr>
+               <td>KITA</td>
+               <td align="center">{{ data.tanggal |pabrik_kita |intcomma  }}</td>
+               <td align="center">{{ data.tanggal |persenpabrik_kita |intcomma  }}</td>
+               <td align="center">{{ data.tanggal |kita_depo |intcomma }}</td>
+               <td align="center">{{ data.tanggal | persen_kitadepo  }}</td>
+               <td align="center">{{ data.tanggal | totalkita_depo |intcomma }}</td>
+               <td align="center">{{ data.tanggal | totalpersen_kita  }}</td>
+           </tr>
+            <tr>
+               <td>PICASSO</td>
+               <td align="center">{{ data.tanggal |pabrik_picasso |intcomma  }}</td>
+               <td align="center">{{ dat.tanggal |persenpabrik_picasso}}</td>
+               <td align="center">{{ data.tanggal |picasso_depo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | persen_picassodepo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | totalpicasso_depo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | totalpersen_picasso }}</td>
+           </tr>
+           <tr>
+               <td>HARMONY</td>
+               <td align="center">{{ data.tanggal |pabrik_harmony |intcomma  }}</td>
+               <td align="center">{{ dat.tanggal |persenpabrik_harmony }}</td>
+               <td align="center">{{ data.tanggal | harmony_depo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | persen_harmonydepo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | totalharmony_depo|intcomma}}</td>
+               <td align="center">{{ data.tanggal | totalpersen_harmony }}</td>
+           </tr>
+            <tr>
+               <td>ATENA</td>
+               <td align="center">{{ data.tanggal |pabrik_atena |intcomma  }}</td>
+               <td align="center">{{ dat.tanggal |persenpabrik_atena }}</td>
+               <td align="center">{{ data.tanggal | atena_depo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | persen_atenadepo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | totalatena_depo |intcomma}}</td>
+               <td align="center">{{ data.tanggal | totalpersen_atena }}</td>
+           </tr>
+            <tr>
+                <td>MASIMO</td>
+                <td align="center">{{ data.tanggal | pabrik_masimo |intcomma  }}</td>
+                <td align="center">{{ data.tanggal | persenpabrik_masimo |intcomma  }}</td>
+                <td align="center">-</td>
+                <td align="center">-</td>
+                <td align="center">{{ data.tanggal | pabrik_masimo |intcomma  }}</td>
+                <td align="center">{{ data.tanggal | totalpersen_masimo  |intcomma  }}</td>
+            </tr>
+             <tr>
+               <td ><strong>Grand Total</strong></td>
+                 <td align="center">{{ data.tanggal | totalpabrik | intcomma }}</td>
+                 <td align="center">{{ data.tanggal | persenpabrik_total }}</td>
+                 <td align="center">{{ data.tanggal | grandtotaldepo |intcomma}}</td>
+                 <td align="center">{{ data.tanggal | grandtotalpersen_depo |intcomma}}</td>
+                 <td align="center">{{ data.tanggal | grandtotal_depo |intcomma}}</td>
+                 <td align="center">{{ data.tanggal | grandtotal_persen |intcomma}}</td>
+             </tr>
+           </thead>
+       </table>
+    </div>
+{% endfor %}
+
+</div>
+
+                  </div>
+                  </div>
+                </div>
+              </div>
+
+{% endblock %}

@@ -12,6 +12,8 @@ import pyodbc
 from functions .functions import decript
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from depo .models import Depo
+from django.db.models import Q
 
 
 def handler404(request):
@@ -122,44 +124,7 @@ def index(request):
 @login_required
 def save(request):
    try:
-       # return HttpResponse("dda")
-       # con = pyodbc.connect("DRIVER={FreeTds};server=192.168.10.2;database=Stok-Depo;uid=sa;pwd=5u1k0d3n2")
-       # picasso = con.cursor()
-       # picasso.execute("select sum(stok) as total from stok where left(kode_barang,4)= 'FG.P' ")
-       # picasso_row = str(picasso.fetchone()).strip()
-       # picasso_row1 = picasso_row.replace("(", " ")
-       # picasso_row2 = picasso_row1.replace(",", " ")
-       # tpicasso = picasso_row2.replace(")", " ")
-       #
-       # atena = con.cursor()
-       # atena.execute("select sum(stok) as total from stok where LEFT(kode_barang,4) ='FG.G' ")
-       # atena_row = str(atena.fetchone()).strip()
-       # atena_row1 = atena_row.replace("(", " ")
-       # atena_row2 = atena_row1.replace(",", " ")
-       # tatena = atena_row2.replace(")", " ")
-       #
-       # harmoni = con.cursor()
-       # harmoni.execute("select sum(stok) as total from stok where LEFT(kode_barang,4) ='FG.H' ")
-       # harmoni_row = str(harmoni.fetchone()).strip()
-       # harmoni_row1 = harmoni_row.replace("(", " ")
-       # harmoni_row2 = harmoni_row1.replace(",", " ")
-       # tharmoni = harmoni_row2.replace(")", " ")
-       #
-       # kita = con.cursor()
-       # kita.execute("select sum(stok) as total from stok where LEFT(kode_barang,4) ='FG.K' ")
-       # kita_row = str(kita.fetchone()).strip()
-       # kita_row1 = kita_row.replace("(", " ")
-       # kita_row2 = kita_row1.replace(",", " ")
-       # tkita = kita_row2.replace(")", " ")
-       #
-       # masimo = con.cursor()
-       # masimo.execute("select sum(stok) as total from stok where LEFT(kode_barang,4) ='FG.O' ")
-       # masimo_row = str(masimo.fetchone()).strip()
-       # masimo_row1 = masimo_row.replace("(", " ")
-       # masimo_row2 = masimo_row1.replace(",", " ")
-       # tmasimo =masimo_row2.replace(")", " ")
        jumlah = int(request.POST['jumlah']) + 1
-
        bln = request.POST['month']
        bul = int(bln)
        bulan = 0
@@ -188,16 +153,6 @@ def save(request):
                if disc >1 :
                   return HttpResponse("Maaf satu bulan maskimal 2 kali penginputan")
                else :
-                   # stokpabrik = StokPabrik(tanggal=tanggal, barang='KITA', stok=tkita)
-                   # stokpabrik.save()
-                   # stokpabrik = StokPabrik(tanggal=tanggal, barang='PICASSO', stok=tpicasso)
-                   # stokpabrik.save()
-                   # stokpabrik = StokPabrik(tanggal=tanggal, barang='ATENA', stok=tatena)
-                   # stokpabrik.save()
-                   # stokpabrik = StokPabrik(tanggal=tanggal, barang='HARMONI', stok=tharmoni)
-                   # stokpabrik.save()
-                   # stokpabrik = StokPabrik(tanggal=tanggal, barang='MASIMO', stok=tmasimo)
-                   # stokpabrik.save()
                    for i in range(1,jumlah):
                      size = request.POST["size"+str(i)]
                      spicasso = request.POST["picasso" + str(i)]
@@ -226,9 +181,14 @@ def printstok(request):
 
 @login_required
 def data(request):
-   depo = request.user.useremployee.karyawan.depo.id
-   data = Stok.objects.filter(depo_id=depo)
-   return render(request,"stok/data.html",{"data":data})
+   user = request.user.useremployee.karyawan.depo.id
+    # return HttpResponse(user)
+   if user != 3:
+       depo = request.user.useremployee.karyawan.depo.id
+       data = Stok.objects.filter(depo_id=depo)
+       return render(request,"stok/data.html",{"data":data})
+   else :
+       return render(request, "404.html")
 
 @login_required
 def edit(request , id):
@@ -250,3 +210,40 @@ def edit(request , id):
     else :
           form = StokForm(instance=stok)
           return render(request,"stok/edit.html",{"form":form})
+
+@login_required
+def cekstok(request):
+    user = request.user.useremployee.karyawan.depo.id
+    # return HttpResponse(user)
+    if user == 3:
+        if request.POST :
+            bln = request.POST['month']
+            periode = request.POST['periode']
+            depo = request.POST['depo']
+            bul = int(bln)
+            bulan = 0
+            if (bul < 10):
+                bulan = "0" + bln
+            else:
+                bulan = bln
+
+            tgl = 0
+            if periode == "1":
+                tgl = "5"
+            else:
+                tgl = "19"
+            now = datetime.datetime.now()
+            year = str(now.year)
+            # return HttpResponse(year+"-"+bulan+"tgl)-"+
+            tanggal = year + "-" + bulan + "-" + tgl
+            data = Stok.objects.filter(depo_id=depo,tanggal = tanggal)
+            dep = Depo.objects.filter(~Q(id=3))
+
+            return render(request, "stok/cekstok.html", {"data": data, "depo": dep})
+        else :
+            data = Stok.objects.all()
+            # cekdetail = Jual.objects.filter(~Q(id=c.id), bjual__isnull=True)
+            depo = Depo.objects.filter(~Q(id=3))
+            return render(request,"stok/cekstok.html",{"data":data,"depo":depo})
+    else:
+        return render(request,"404.html")

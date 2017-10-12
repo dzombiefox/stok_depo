@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+{% block title %} Data Stok {% endblock %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% load templatetags %}
+{% block content %}
+
+
+
+          <div class="">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Data Stok  <small>Depo</small></h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+ <div class="box-body ">
+  <form method="POST" action="cekstok">
+      {% csrf_token %}
+              <div class="row">
+                  <div class="col-xs-2"></div>
+                   <div class="col-xs-2">
+                        <select class="form-control" name="depo" REQUIRED>
+                                <option value="">.:Pilih Depo:.</option>
+                                {% for depo in depo %}
+                                    <option value="{{ depo.id }}">{{ depo.namaDepo }}</option>
+                                {% endfor %}
+                            </select>
+                   </div>
+
+                <div class="col-md-3 col-sm-4 col-xs-4">
+                            <select class="form-control" name="periode" REQUIRED>
+                                <option value="">.:Pilih Periode:.</option>
+                                <option value="1">Periode 1</option>
+                                <option value="2">Periode 2</option>
+                            </select>
+                        </div>
+                         <div class="col-md-3 col-sm-4 col-xs-4">
+                           <select class="form-control" name="month" required >
+                                <option  value="" >.:Pilih Bulan:.</option>
+                                <option value="1">JANUARY</option>
+                                <option value="2">FEBRUARY</option>
+                                <option value="3">MARCH</option>
+                                <option value="4">APRIL</option>
+                                <option value="5">MAY</option>
+                                <option value="6">JUNY</option>
+                                <option value="7">JULY</option>
+                                <option value="8">AGUSTUS</option>
+                                <option value="9">SEPTEMBER</option>
+                                <option value="10">OKTOBER</option>
+                                <option value="11">NOVEMBER</option>
+                                <option value="12">DECEMBER</option>
+                            </select>
+                        </div>
+                <div class="col-xs-2">
+                  <input type="submit" value="Cari" class="btn btn-primary btn-flat" >
+                </div>
+              </div>
+
+            </div>
+                   </form>
+                        <table class="table table-striped table-bordered tabledata">
+      <thead>
+        <th>No</th>
+        <th>Tanggal</th>
+        <th>Ukuran</th>
+        <th>KITA</th>
+        <th>PICASSO</th>
+        <th>HARMONY</th>
+        <th>ATENA</th>
+        <th>Depo</th>
+
+      </thead>
+    <tbody>
+        {% for item in data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.tanggal }}</td>
+                <td>{{ item.size }}</td>
+                <td align="right">{{ item.kita | intcomma }}</td>
+                <td align="right">{{ item.picasso }}</td>
+                <td align="right">{{ item.harmony | intcomma }}</td>
+                <td align="right">{{ item.atena }}</td>
+                <td>{{ item.depo }}</td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{#                   <ul class="pagination">#}
+{#  <li><a href="#">1</a></li>#}
+{#  <li><a href="#">2</a></li>#}
+{#  <li><a href="#">3</a></li>#}
+{#  <li><a href="#">4</a></li>#}
+{#  <li><a href="#">5</a></li>#}
+{#</ul>#}
+{#<div class="pagination">#}
+{#    <span class="step-links pagination">#}
+{#        {% if data.has_previous %}#}
+{#            <a href="?page={{ data.previous_page_number }}">previous</a>#}
+{#        {% endif %}#}
+{##}
+{#        <span class="current">#}
+{#            Page {{ data.number }} of {{ data.paginator.num_pages }}.#}
+{#        </span>#}
+{##}
+{#        {% if data.has_next %}#}
+{#            <a href="?page={{ data.next_page_number }}">next</a>#}
+{#        {% endif %}#}
+{#    </span>#}
+{#</div>#}
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+              </div>
+
+
+
+
+              </div>
+            </div>
+          </div>
+
+
+{% endblock %}

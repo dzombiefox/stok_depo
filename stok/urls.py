@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^data',views.data,name="stokdata"),
     url(r'^tes',views.tes,name="tes"),
     url(r'^edit/(?P<id>.+)$',views.edit,name="editStok"),
+    url(r'^cekstok', views.cekstok, name="cekstok"),
     # url(r'^delete/(?P<data>.+)$',views.delete,name="deleteBarang"),
 
 ]

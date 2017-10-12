@@ -33,7 +33,7 @@ def index(request):
                         periode = request.POST['periode']
                         tgl = 0
                         if periode == "1":
-                           tgl = "5"
+                           tgl = "05"
                         else:
                            tgl = "19"
                         now = datetime.datetime.now()

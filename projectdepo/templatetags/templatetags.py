@@ -8,6 +8,7 @@ from datetime import datetime
 import pyodbc
 from django.http import HttpResponse
 
+
 @register.filter(name="boxkita")
 def boxkita(tanggal,size):
     data = Stok.objects.filter(tanggal=tanggal,size = size)
@@ -468,7 +469,7 @@ def selisih_atena(tanggal):
 def pabrik_kita(tanggal):
     try :
         data = StokPabrik.objects.get(tanggal = tanggal,barang= 'KITA')
-        return data.stok
+        return int(data.stok)
     except ObjectDoesNotExist:
         return 0
 
@@ -476,14 +477,14 @@ def pabrik_kita(tanggal):
 def pabrik_picasso(tanggal):
     try :
         data = StokPabrik.objects.get(tanggal=tanggal, barang='PICASSO')
-        return data.stok
+        return int(data.stok)
     except ObjectDoesNotExist:
         return 0
 @register.filter(name="pabrik_harmony")
 def pabrik_harmony(tanggal):
     try :
         data = StokPabrik.objects.get(tanggal=tanggal, barang='HARMONY')
-        return data.stok
+        return int(data.stok)
     except ObjectDoesNotExist:
         return 0
 
@@ -491,7 +492,7 @@ def pabrik_harmony(tanggal):
 def pabrik_atena(tanggal):
     try :
         data = StokPabrik.objects.get(tanggal=tanggal, barang='ATENA')
-        return data.stok
+        return int(data.stok)
     except ObjectDoesNotExist:
         return 0
 
@@ -499,7 +500,7 @@ def pabrik_atena(tanggal):
 def pabrik_masimo(tanggal):
     try :
         data = StokPabrik.objects.get(tanggal=tanggal, barang='MASIMO')
-        return data.stok
+        return int(data.stok)
     except ObjectDoesNotExist:
         return 0
 
@@ -518,7 +519,9 @@ def persenpabrik_kita(tanggal):
     # return 1
     try :
         totalstok = totalpabrik(tanggal)
+        # return totalstok
         stok = pabrik_kita(tanggal)
+        # return stok
         if totalstok == 0 | stok == 0 :
             total = 0
         else :
@@ -804,7 +807,10 @@ def grandtotal_persen(tanggal):
     return  "{:.2f}".format(total)
 
 
-
+@register.filter(name= "tanggal")
+def tanggal(tanggal):
+    datetime_object = datetime.strptime(tanggal,  '%Y-%d-%m')
+    return datetime_object
 
 
 

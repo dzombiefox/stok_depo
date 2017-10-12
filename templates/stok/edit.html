@@ -7,6 +7,7 @@
 {% block content %}
     <script>
     $(document).ready(function () {
+       $('.sizes').attr("style", "pointer-events: none;");
         var form = $(".form")
         form.submit(function(e){
               $.ajax({
@@ -70,10 +71,11 @@
                         </div>
                       </div>
                       <div class="form-group">
+
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">UKURAN <span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {{ form.size | add_class:'form-control' |attr:"readonly" }}
+                          {{ form.size | add_class:'form-control sizes' |attr:"readonly" }}
                         </div>
                       </div>
                       <div class="form-group">
@@ -110,6 +112,7 @@
 
 						  <button class="btn btn-primary" type="reset">Reset</button>
                           <button type="submit" class="btn btn-success">Submit</button>
+                          <a href ="{% url "stokdata" %}"class="btn btn-warning">Back</a>
                         </div>
                       </div>
 
